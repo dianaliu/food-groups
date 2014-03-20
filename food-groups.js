@@ -4,7 +4,6 @@ var Crawler = require("crawler").Crawler;
 var program = require('commander');
 var c;
 
-// TODO: Autowrite to source-group.yml
 // TODO: Group fitbit sub-groups under top level group
 var initCrawler = {
   'fitbit': function fitbit() {
@@ -75,24 +74,24 @@ var queue_links = {
 
 program
   .version('0.0.1')
-  .usage('-s source -f food')
+  .usage('-s source -g group')
   .option('-s, --source <source>', 'Select source from [fitbit, fatsecret]')
-  .option('-f, --food <food>', 'Select food from [grains, legumes, vegetables]')
+  .option('-g, --group <group>', 'Select group from [grains, legumes, vegetables]')
   .parse(process.argv);
 
-if(program.source && program.food) {
+if(program.source && program.group) {
   if(Object.keys(initCrawler).indexOf(program.source) < 0) {
     throw new Error('Unrecognized source. Valid sources are [fitbit, fatsecret]');
   }
 
-  if(Object.keys(queue_links).indexOf(program.source + '-' + program.food) < 0) {
-    throw new Error('Unrecognized food. Valid foods are [grains, legumes, vegetables]');
+  if(Object.keys(queue_links).indexOf(program.source + '-' + program.group) < 0) {
+    throw new Error('Unrecognized group. Valid groups are [grains, legumes, vegetables]');
   }
 
   initCrawler[program.source]();
-  queue_links[program.source + '-' + program.food]();
+  queue_links[program.source + '-' + program.group]();
 } else {
-  console.error('error: Please supply both a source and food');
+  console.error('error: Please supply both a source and group');
   // Display help and exit
   program.help();
 }
