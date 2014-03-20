@@ -4,7 +4,6 @@ var Crawler = require("crawler").Crawler;
 var program = require('commander');
 var c;
 
-// TODO: Group fitbit sub-groups under top level group
 var initCrawler = {
   'fitbit': function fitbit() {
     c = new Crawler({
@@ -13,11 +12,31 @@ var initCrawler = {
         var group = $('h1 b').text();
         var $foods = $('tr > td:first-child');
 
-        console.log(group.toLowerCase() + ':');
+        // console.log(group.toLowerCase() + ':');
 
         $foods.each(function(index, food) {
-          console.log('\t- "' + $(food).text() + '"');
+          if($(food).text().indexOf("\"") > -1) {
+            // Use single quotes if there is a double quote in the name
+            // Usually, for inches
+            console.log('\t- \'' + $(food).text() + '\'');
+          } else {
+            // Use double quotes in other situations
+            // Usually for apostrophes
+            // God help us all if there is a food with both double and single apostrophes.
+            console.log('\t- "' + $(food).text() + '"');
+          }
         });
+
+
+        // Find and queue additional pages
+        // Loops through page 1 of each sub-group, then page 2 of each sub-group, etc.
+        var $currentPage = $('#content ul li:not(:has(a))');
+        if($currentPage.next('li').length > 0) {
+          var nextPage = $currentPage.next('li').find('a').attr('href');
+          nextPage = 'https://www.fitbit.com' + nextPage;
+          c.queue(nextPage);
+        }
+
       }
     });
   },
@@ -37,7 +56,6 @@ var initCrawler = {
   }
 };
 
-// FIXME: Paginate fitbit pages
 var queue_links = {
   'fatsecret-grains': function () {
     c.queue('http://www.fatsecret.com/calories-nutrition/group/breads-and-cereals');
