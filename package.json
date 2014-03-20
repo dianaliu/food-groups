@@ -1,0 +1,11 @@
+{
+    "name": "food-groups"
+  , "version": "0.0.1"
+  , "description": "List foods from different food groups"
+  , "keywords": ["food", "nutrition", "fitbit", "fatsecret"]
+  , "author": "@dianagliu"
+  , "repository": { "type": "git", "url": "https://github.com/dianaliu/food-groups.git" }
+  , "dependencies": { "crawler": ">= 0.2.5", "commander": ">= 2.1.0" }
+  , "main": "food-groups"
+  , "engines": { "node": ">= 0.10.x" }
+}
